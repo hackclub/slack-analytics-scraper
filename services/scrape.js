@@ -42,6 +42,9 @@ export async function scrape ({ isAllTime } = {}) {
   if (isLoggedOut) {
     console.log('logged out')
     await login(page)
+    if (!isAllTime) {
+      waitForResponse = waitForTimelineStats(page)
+    }
   }
 
   if (isAllTime) {
@@ -62,7 +65,7 @@ async function waitForTimelineStats (page, { isAllTime } = {}) {
 }
 
 async function handleTimelineStats ({ stats }, { isAllTime }) {
-  console.log('stats', stats)
+  // console.log('stats', stats)
   if (!isAllTime) {
     stats = stats.slice(-1) // only last day
   }
@@ -71,14 +74,18 @@ async function handleTimelineStats ({ stats }, { isAllTime }) {
     // TODO: guests_count, full_members_count, chats_dms_count_1d, chats_groups_count_1d
     return Promise.all([
       impact.incrementMetric(
-        'messages', { type: 'dm' }, stat.chats_dms_count_1d, { date, setTotal: true }
+        'messages', { type: 'dm' }, stat.chats_dms_count_1d, { date, isTotal: true }
       ),
       impact.incrementMetric(
-        'messages', { type: 'group' }, stat.chats_groups_count_1d, { date, setTotal: true }
+        'messages', { type: 'group' }, stat.chats_groups_count_1d, { date, isTotal: true }
       ),
       impact.incrementMetric(
-        'messages', { type: 'public' }, stat.chats_channels_count_1d, { date, setTotal: true }
+        'messages', { type: 'public' }, stat.chats_channels_count_1d, { date, isTotal: true }
       )
+      // don't call this. this was just run 1 time to get data before the other method of active-users was implemented
+      // impact.incrementMetric(
+      //   'active-users', {}, stat.readers_count_1d, { date, isTotal: true, isSingleTimeScale: true, timeScale: 'day' }
+      // )
     ]).catch((err) => { console.log(err) })
   }, { concurrency: BULK_DATES_CONCURRENCY })
   console.log('res', res)
@@ -116,8 +123,6 @@ async function setToAllTime (page, pendingXHR) {
   // let slack do initial rendering & load up xhr reqs
   await new Promise((resolve) => setTimeout(resolve, INITIAL_RENDER_DELAY_MS))
   await pendingXHR.waitForAllXhrFinished()
-
-  await page.screenshot({ path: 'example.png' })
 
   await page.click(DATE_PICKER_SELECTOR)
   await page.click(ALL_TIME_SELECTOR)

@@ -43,12 +43,12 @@ async function handleUserStats ({ stats }) {
   // users = users + members
   await Promise.map(usersArr, ({ count, date }) => {
     // TODO: dimensions on timezone?
-    impact.incrementMetric('users', {}, count, { date, setTotal: true })
+    impact.incrementMetric('users', {}, count, { date, isTotal: true })
   }, { concurrency: INCREMENT_METRIC_CONCURRENCY })
 
   await Promise.map(membersArr, ({ count, date }) => {
     // TODO: dimensions on timezone?
-    impact.incrementMetric('members', {}, count, { date, setTotal: true })
+    impact.incrementMetric('members', {}, count, { date, isTotal: true })
   }, { concurrency: INCREMENT_METRIC_CONCURRENCY })
 
   await Promise.map(stats, (stat) => {
