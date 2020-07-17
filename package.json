@@ -14,7 +14,7 @@
   "dependencies": {
     "@slack/bolt": "^2.1.1",
     "@slack/rtm-api": "^5.0.5",
-    "@techby/impact": "0.0.3",
+    "@techby/impact": "0.0.6",
     "bluebird": "^3.7.2",
     "cron": "^1.8.2",
     "crypto": "^1.0.1",

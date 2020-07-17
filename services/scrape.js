@@ -2,11 +2,11 @@ import puppeteer from 'puppeteer'
 import fs from 'fs'
 import pendingxhr from 'pending-xhr-puppeteer'
 import Promise from 'bluebird'
-import { Impact } from '@techby/impact'
+import { init as initImpact, incrementMetric } from '@techby/impact'
 
 const { PendingXHR } = pendingxhr
 
-const impact = new Impact({
+initImpact({
   apiKey: process.env.IMPACT_API_KEY
 })
 
@@ -73,17 +73,17 @@ async function handleTimelineStats ({ stats }, { isAllTime }) {
     const date = new Date(stat.ds)
     // TODO: guests_count, full_members_count, chats_dms_count_1d, chats_groups_count_1d
     return Promise.all([
-      impact.incrementMetric(
+      incrementMetric(
         'messages', { type: 'dm' }, stat.chats_dms_count_1d, { date, isTotal: true }
       ),
-      impact.incrementMetric(
+      incrementMetric(
         'messages', { type: 'group' }, stat.chats_groups_count_1d, { date, isTotal: true }
       ),
-      impact.incrementMetric(
+      incrementMetric(
         'messages', { type: 'public' }, stat.chats_channels_count_1d, { date, isTotal: true }
       )
       // don't call this. this was just run 1 time to get data before the other method of active-users was implemented
-      // impact.incrementMetric(
+      // incrementMetric(
       //   'active-users', {}, stat.readers_count_1d, { date, isTotal: true, isSingleTimeScale: true, timeScale: 'day' }
       // )
     ]).catch((err) => { console.log(err) })

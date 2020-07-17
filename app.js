@@ -1,12 +1,12 @@
 import bolt from '@slack/bolt'
 import slackRtm from '@slack/rtm-api'
-import { Impact } from '@techby/impact'
+import { init as initImpact, incrementMetric, incrementUnique } from '@techby/impact'
 
 import { startCrons } from './services/cron.js'
 import { populateUsersCache, getCachedUser, upsertCachedUser } from './services/user.js'
 import { hashUserId } from './services/util.js'
 
-const impact = new Impact({
+initImpact({
   apiKey: process.env.IMPACT_API_KEY
 })
 
@@ -46,7 +46,7 @@ const app = new App({
     if (hasPresenceChanged && presence === 'active' && !cachedUser?.isBot) {
       console.log('presence_change', user)
       const hashedUserId = hashUserId(user)
-      impact.incrementUnique('active-users', hashedUserId)
+      incrementUnique('active-users', hashedUserId)
     }
   })
 
@@ -59,8 +59,8 @@ const app = new App({
     upsertCachedUser(user.id, { isGuest, isBot })
 
     if (!isBot) {
-      impact.incrementMetric('users')
-      impact.incrementUnique('active-users', hashedUserId)
+      incrementMetric('users')
+      incrementUnique('active-users', hashedUserId)
     }
   })
 
@@ -74,13 +74,13 @@ const app = new App({
 
     if (wasGuest && !isGuest && !isBot) {
       upsertCachedUser(user.id, { isGuest: false })
-      impact.incrementMetric('members', {
+      incrementMetric('members', {
         // derived dimension that resolves to # of days since hashedUserId was first recorded
         'days-until-promoted': { hash: hashedUserId }
       })
     }
 
-    impact.incrementUnique('active-users', hashedUserId)
+    incrementUnique('active-users', hashedUserId)
   })
 
   // app.event('message', async ({ event }) => {
