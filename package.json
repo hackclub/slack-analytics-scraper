@@ -14,10 +14,9 @@
   "dependencies": {
     "@slack/bolt": "^2.1.1",
     "@slack/rtm-api": "^5.0.5",
-    "@techby/impact": "0.0.6",
+    "@techby/impact": "0.0.8",
     "bluebird": "^3.7.2",
     "cron": "^1.8.2",
-    "crypto": "^1.0.1",
     "pending-xhr-puppeteer": "^2.3.2",
     "puppeteer": "^5.0.0"
   },

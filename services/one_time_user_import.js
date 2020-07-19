@@ -6,7 +6,7 @@ import { hashUserId } from './util.js'
 import { init as initImpact, incrementMetric, incrementUnique } from '@techby/impact'
 
 initImpact({
-  apiKey: process.env.IMPACT_API_KEY
+  apiKey: process.env.TECH_BY_API_KEY
 })
 
 const INCREMENT_METRIC_CONCURRENCY = 10
@@ -43,12 +43,12 @@ async function handleUserStats ({ stats }) {
   // users = users + members
   await Promise.map(usersArr, ({ count, date }) => {
     // TODO: dimensions on timezone?
-    incrementMetric('users', {}, count, { date, isTotal: true })
+    return incrementMetric('users', {}, count, { date, isTotal: true })
   }, { concurrency: INCREMENT_METRIC_CONCURRENCY })
 
   await Promise.map(membersArr, ({ count, date }) => {
     // TODO: dimensions on timezone?
-    incrementMetric('members', {}, count, { date, isTotal: true })
+    return incrementMetric('members', {}, count, { date, isTotal: true })
   }, { concurrency: INCREMENT_METRIC_CONCURRENCY })
 
   await Promise.map(stats, (stat) => {

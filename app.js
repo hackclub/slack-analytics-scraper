@@ -6,8 +6,9 @@ import { startCrons } from './services/cron.js'
 import { populateUsersCache, getCachedUser, upsertCachedUser } from './services/user.js'
 import { hashUserId } from './services/util.js'
 
+console.log('init', process.env.TECH_BY_API_KEY)
 initImpact({
-  apiKey: process.env.IMPACT_API_KEY
+  apiKey: process.env.TECH_BY_API_KEY
 })
 
 // Using RTMClient instead of bolt because bolt (events API) doesn't support presence changes

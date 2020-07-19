@@ -25,9 +25,9 @@ Or stream bot could just include `@techby/impact` lib and do the `incrementMetri
 # Run
 Requires Node 14 (esm)
 
-`SLACK_BOT_TOKEN=<token> SLACK_SIGNING_SECRET=<secret> IMPACT_API_KEY=<api key> npm run dev`
+`SLACK_BOT_TOKEN=<token> SLACK_SIGNING_SECRET=<secret> TECH_BY_API_KEY=<api key> npm run dev`
 `ngrok http 3000`
 See `Go to "Event Subscriptions"` step in Slack Instructions above
 
 For scraper to work, it needs a Slack email and pw
-`SLACK_EMAIL=<email> SLACK_PASSWORD=<password> SLACK_BOT_TOKEN=<token> SLACK_SIGNING_SECRET=<secret> IMPACT_API_KEY=<api key> npm run dev`
+`SLACK_EMAIL=<email> SLACK_PASSWORD=<password> SLACK_BOT_TOKEN=<token> SLACK_SIGNING_SECRET=<secret> TECH_BY_API_KEY=<api key> npm run dev`

@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import puppeteer from 'puppeteer'
 import fs from 'fs'
 import pendingxhr from 'pending-xhr-puppeteer'
@@ -7,7 +8,7 @@ import { init as initImpact, incrementMetric } from '@techby/impact'
 const { PendingXHR } = pendingxhr
 
 initImpact({
-  apiKey: process.env.IMPACT_API_KEY
+  apiKey: process.env.TECH_BY_API_KEY
 })
 
 const EMAIL_SELECTOR = '#email'
@@ -16,7 +17,7 @@ const LOGIN_BUTTON_SELECTOR = '#signin_btn'
 const DATE_PICKER_SELECTOR = '.ent_date_picker_btn'
 const ALL_TIME_SELECTOR = 'li[data-qa="context_menu_item_1"]'
 const TIME_SERIES_URL_PART = '/api/team.stats.timeSeries'
-const INITIAL_RENDER_DELAY_MS = 2000
+const INITIAL_RENDER_DELAY_MS = 3000
 const BULK_DATES_CONCURRENCY = 2
 
 // FIXME: node cron to run this every day
@@ -88,7 +89,7 @@ async function handleTimelineStats ({ stats }, { isAllTime }) {
       // )
     ]).catch((err) => { console.log(err) })
   }, { concurrency: BULK_DATES_CONCURRENCY })
-  console.log('res', res)
+  console.log('res', JSON.stringify(await Promise.map(_.flatten(res), (res) => res.json()), null, 2))
   return true
 }
 
@@ -128,3 +129,6 @@ async function setToAllTime (page, pendingXHR) {
   await page.click(ALL_TIME_SELECTOR)
   return waitForTimelineStats(page, { isAllTime: true })
 }
+
+// initial import
+// scrape({ isAllTime: true })
