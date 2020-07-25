@@ -1,0 +1,5 @@
+./.git
+./node_modules
+./sample_data
+./cookies.json
+./npm-debug.log

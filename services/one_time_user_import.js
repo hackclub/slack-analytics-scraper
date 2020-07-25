@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
 
-import { hashUserId } from './util.js'
+import { dateToStr, hashUserId } from './util.js'
 import { init as initImpact, incrementMetric, incrementUnique } from '@techby/impact'
 
 initImpact({
@@ -60,19 +60,6 @@ async function handleUserStats ({ stats }) {
   // FIXME: override active users count w/ one from slack (for past data).
   // otherwise a user is only active on day they sign up (for all we know)
   console.log('done')
-}
-
-function dateToStr (date) {
-  const yyyy = date.getFullYear()
-  let mm = date.getMonth() + 1
-  if (mm < 10) {
-    mm = `0${mm}`
-  }
-  let dd = date.getDate()
-  if (dd < 10) {
-    dd = `0${dd}`
-  }
-  return `${yyyy}-${mm}-${dd}`
 }
 
 handleUserStats(JSON.parse(fs.readFileSync('./sample_data/users.json')))

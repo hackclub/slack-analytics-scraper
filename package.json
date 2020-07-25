@@ -15,8 +15,10 @@
     "@slack/bolt": "^2.1.1",
     "@slack/rtm-api": "^5.0.5",
     "@techby/impact": "0.0.8",
+    "axios": "^0.19.2",
     "bluebird": "^3.7.2",
     "cron": "^1.8.2",
+    "lodash": "^4.17.19",
     "pending-xhr-puppeteer": "^2.3.2",
     "puppeteer": "^5.0.0"
   },

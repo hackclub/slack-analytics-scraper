@@ -25,7 +25,9 @@ const BULK_DATES_CONCURRENCY = 2
 // (ie if the page hasn't fully loaded before chekcing if DATE_PICKER_SELECTOR exists)
 export async function scrape ({ isAllTime } = {}) {
   console.log('all time', isAllTime)
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox']
+  })
   const page = await browser.newPage()
   const pendingXHR = new PendingXHR(page)
 
@@ -82,11 +84,11 @@ async function handleTimelineStats ({ stats }, { isAllTime }) {
       ),
       incrementMetric(
         'messages', { type: 'public' }, stat.chats_channels_count_1d, { date, isTotal: true }
-      )
+      ),
       // don't call this. this was just run 1 time to get data before the other method of active-users was implemented
-      // incrementMetric(
-      //   'active-users', {}, stat.readers_count_1d, { date, isTotal: true, isSingleTimeScale: true, timeScale: 'day' }
-      // )
+      incrementMetric(
+        'active-users', {}, stat.readers_count_1d, { date, isTotal: true, isSingleTimeScale: true, timeScale: 'day' }
+      )
     ]).catch((err) => { console.log(err) })
   }, { concurrency: BULK_DATES_CONCURRENCY })
   console.log('res', JSON.stringify(await Promise.map(_.flatten(res), (res) => res.json()), null, 2))
@@ -131,4 +133,4 @@ async function setToAllTime (page, pendingXHR) {
 }
 
 // initial import
-// scrape({ isAllTime: true })
+// scrape()
