@@ -46,7 +46,7 @@ export async function updateBankStats (date = new Date()) {
   })
 }
 
-// const allDates = getDateRange(new Date('2018-05-31'), new Date('2020-07-14'))
+// const allDates = getDateRange(new Date('2018-07-15'), new Date('2020-07-29'))
 // Promise.map(allDates, updateBankStats, { concurrency: 1 })
 
 // updateBankStats()
